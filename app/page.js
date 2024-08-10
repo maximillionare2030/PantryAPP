@@ -62,22 +62,24 @@ export default function Home() {
   const [chatInput, setChatInput] = useState('');
   const [chatMessages, setChatMessages] = useState([]);
 
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      updateInventory();
+    }
+  }, []);
+
   const updateInventory = async () => {
     const snapshot = query(collection(firestore, 'inventory'));
     const docs = await getDocs(snapshot);
     const inventoryList = [];
     docs.forEach((doc) => {
-      inventoryList.push({ 
-        name: doc.id, 
-        ...doc.data(), 
+      inventoryList.push({
+        name: doc.id,
+        ...doc.data(),
       });
     });
     setInventory(inventoryList);
   };
-
-  useEffect(() => {
-    updateInventory();
-  }, []);
 
   const addItem = async (item, quantity, image) => {
     if (typeof window !== 'undefined') {
